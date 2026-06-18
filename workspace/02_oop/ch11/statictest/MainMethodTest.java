@@ -1,7 +1,5 @@
 package ch11.statictest;
 
-import com.sun.tools.javac.Main;
-
 public class MainMethodTest {
 
     public void instanceMethod() {
