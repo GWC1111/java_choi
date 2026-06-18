@@ -1,42 +1,56 @@
 package ch07;
 
-import java.sql.*;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
-public class JdbcPostPreparedTest {
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-//    private static final String DB_URL = "jdbc:mysql://localhost:3306/board_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
-    private static final String DB_URL = "jdbc:mysql://dain2.iptime.org:3306/board_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "12345";
+public class ConnectionPoolTest {
+
+    private static DataSource dataSource;
+
+    static {
+        HikariConfig config = new HikariConfig("/hikari.properties");
+        dataSource = new HikariDataSource(config);
+    }
+
+
 
     public static void main(String[] args){
-//        findAll();
-//        insert(2, "2번이 등록한 게시글", "안녕하세요. 자바 공부 해요.");
-//        findById(10);
-//        update(10, "수정된 10번 게시글", "수정했어요");
-//        findAll();
-//        delete(10);
-//
-//        deleteAll(2);
-//        findAll("자바");
+        findAll();
+        insert(2, "2번이 등록한 게시글", "안녕하세요. 자바 공부 해요.");
+        findById(10);
+        update(10, "수정된 10번 게시글", "수정했어요");
+        findAll();
+        delete(10);
+
+        deleteAll(2);
+        findAll("자바");
 
         login("haru@gmail.com", "123");
         login("haru@gmail.com", "pwd123");
         login("haru@gmail.com' OR '1' = '1", "pwd1221343");
-        login("haru@gmail.com", "' OR '1' = '1");
+
+        if(dataSource != null){
+            ((HikariDataSource)dataSource).close();
+        }
     }
 
     // 로그인
     public static void login(String email, String password) {
         String sql = "SELECT * FROM member WHERE email = ? AND password = ?";
-        System.out.println("로그인 쿼리: " + sql);
+
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try{ // 플랜 A
             // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
             // 2. SQL 실행 객체 생성(Statement 객체 생성)
             pstmt = conn.prepareStatement(sql);
@@ -78,7 +92,7 @@ public class JdbcPostPreparedTest {
 
         try{ // 플랜 A
             // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
             // 2. SQL 실행 객체 생성(Statement 객체 생성)
             pstmt = conn.prepareStatement(sql);
@@ -116,7 +130,7 @@ public class JdbcPostPreparedTest {
 
         try{ // 플랜 A
             // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
             // 2. SQL 실행 객체 생성(Statement 객체 생성)
             pstmt = conn.prepareStatement(sql);
@@ -165,7 +179,7 @@ public class JdbcPostPreparedTest {
 
         try{ // 플랜 A
             // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
             // 2. SQL 실행 객체 생성(Statement 객체 생성)
             pstmt = conn.prepareStatement(sql);
@@ -204,7 +218,7 @@ public class JdbcPostPreparedTest {
 
         try{ // 플랜 A
             // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
             // 2. SQL 실행 객체 생성(Statement 객체 생성)
             pstmt = conn.prepareStatement(sql);
@@ -235,7 +249,7 @@ public class JdbcPostPreparedTest {
 
         try{ // 플랜 A
             // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
             // 2. SQL 실행 객체 생성(Statement 객체 생성)
             pstmt = conn.prepareStatement(sql);
@@ -264,7 +278,7 @@ public class JdbcPostPreparedTest {
 
         try{ // 플랜 A
             // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
             // 2. SQL 실행 객체 생성(Statement 객체 생성)
             pstmt = conn.prepareStatement(sql);
