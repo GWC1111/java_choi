@@ -5,28 +5,23 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class JdbcPostTest {
+public class JdbcPostTest_homework {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/board_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "12345";
 
     public static void main(String[] args){
-//        findAll();
-//        insert(2, "2번이 등록한 게시글", "안녕하세요. 자바 공부 해요.");
-//        findById(5);
-//        update(1, "수정된 1번 게시글", "수정했어요");
-//        findAll();
-//        delete(26);
-//        findAll();
-        deleteAll(2);
+        findAll();
+        insert(2, "2번이 등록한 게시글", "안녕하세요. 자바 공부 해요.");
+        findById(5);
+        update(1, "수정된 1번 게시글", "수정했어요");
+        findAll();
+        delete(26);
         findAll();
     }
 
     // 등록(C)
     static void insert(int memberId, String title, String content){
-        String sql = "INSERT INTO post (member_id, title, content) VALUES \n" +
-                "    ("+memberId+", '"+title+"', '"+content+"')";
-
         Connection conn = null;
         Statement stmt = null;
 
@@ -39,7 +34,8 @@ public class JdbcPostTest {
 
             // 3. SQL 실행(SELECT)
             // 4. 결과 수신(ResultSet 객체 생성)
-            int affectedRows = stmt.executeUpdate(sql);
+            int affectedRows = stmt.executeUpdate("INSERT INTO post (member_id, title, content) VALUES \n" +
+                    "    ("+memberId+", '"+title+"', '"+content+"')");
 
             System.out.println("게시글 등록 완료: " + affectedRows + "건 반영됨.");
 
@@ -55,7 +51,6 @@ public class JdbcPostTest {
 
     // 목록 조회(R)
     static void findAll(){
-        String sql = "SELECT id, title, view_count viewCount, created_at AS createdAt FROM post";
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -65,14 +60,13 @@ public class JdbcPostTest {
 
             stmt = conn.createStatement();
 
-            rs = stmt.executeQuery(sql);
+            rs = stmt.executeQuery("SELECT * FROM post");
+
             while(rs.next()) {
                 int id = rs.getInt("id");
                 String title = rs.getString("title");
-                int viewCount = rs.getInt("viewCount");
-                String createdAt = rs.getString("createdAt");
 
-                System.out.println("ID: " + id + ", 제목: " + title +", 조회수: " + viewCount + ", 작성일: " + createdAt);
+                System.out.println("ID: " + id + ", Title: " + title);
             }
         }catch(Exception e){
             System.out.println("에러 발생: " + e.getMessage());
@@ -86,7 +80,6 @@ public class JdbcPostTest {
 
     // 한건 조회(R)
     static void findById(int id){
-        String sql = "SELECT id, title, content, view_count view_count, created_at AS createdAt FROM post WHERE id = " + id;
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -96,15 +89,12 @@ public class JdbcPostTest {
 
             stmt = conn.createStatement();
 
-            rs = stmt.executeQuery(sql);
+            rs = stmt.executeQuery("SELECT * FROM post WHERE id = " + id);
 
             while(rs.next()) {
                 String title = rs.getString("title");
-                String content = rs.getString("content");
-                int viewCount = rs.getInt("view_count");
-                String createdAt = rs.getString("createdAt");
 
-                System.out.println("ID: " + id + ", 제목: " + title + ", 내용: " + content + ", 조회수: " + viewCount + ", 작성일: " + createdAt);
+                System.out.println("ID: " + id + ", Title: " + title);
             }
 
         }catch(Exception e){
@@ -119,7 +109,6 @@ public class JdbcPostTest {
 
     // 수정(U)
     static void update(int id, String title, String content){
-        String sql = "UPDATE post SET title = '"+title+"', content = '"+content+"' WHERE id = " + id;
         Connection conn = null;
         Statement stmt = null;
 
@@ -132,7 +121,7 @@ public class JdbcPostTest {
 
             // 3. SQL 실행(SELECT)
             // 4. 결과 수신(ResultSet 객체 생성)
-            int affectedRows = stmt.executeUpdate(sql);
+            int affectedRows = stmt.executeUpdate("UPDATE post SET title = '"+title+"', content = '"+content+"' WHERE id = " + id);
 
             System.out.println("게시글 수정 완료: " + affectedRows + "건 반영됨.");
 
@@ -146,9 +135,8 @@ public class JdbcPostTest {
         }
     }
 
-    // 지정한 id의 게시글 삭제(D)
+    // 삭제(D)
     static void delete(int id){
-        String sql = "DELETE FROM post WHERE id = " + id;
         Connection conn = null;
         Statement stmt = null;
 
@@ -161,7 +149,7 @@ public class JdbcPostTest {
 
             // 3. SQL 실행(SELECT)
             // 4. 결과 수신(ResultSet 객체 생성)
-            int affectedRows = stmt.executeUpdate(sql);
+            int affectedRows = stmt.executeUpdate("DELETE FROM post WHERE id = " + id);
 
             System.out.println("게시글 삭제 완료: " + affectedRows + "건 반영됨.");
 
@@ -175,32 +163,4 @@ public class JdbcPostTest {
         }
     }
 
-    // 지정한 회원의 모든 게시글 삭제(D)
-    static void deleteAll(int memberId){
-        String sql = "DELETE FROM post WHERE member_id = " + memberId;
-        Connection conn = null;
-        Statement stmt = null;
-
-        try{ // 플랜 A
-            // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-
-            // 2. SQL 실행 객체 생성(Statement 객체 생성)
-            stmt = conn.createStatement();
-
-            // 3. SQL 실행(SELECT)
-            // 4. 결과 수신(ResultSet 객체 생성)
-            int affectedRows = stmt.executeUpdate(sql);
-
-            System.out.println("게시글 삭제 완료: " + affectedRows + "건 반영됨.");
-
-        }catch(Exception e){ // 플랜 B
-            System.out.println("에러 발생: " + e.getMessage());
-            e.printStackTrace();
-        }finally{
-            // 5. 생성된 리소스를 생성의 역순으로 해제
-            try{ if(stmt != null) stmt.close(); } catch (Exception e){ }
-            try{ if(conn != null) conn.close(); } catch (Exception e){ }
-        }
-    }
 }
