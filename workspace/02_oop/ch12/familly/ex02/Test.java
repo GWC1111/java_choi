@@ -1,4 +1,4 @@
-package ch12.family.ex02;
+package ch12.familly.ex02;
 
 public class Test {
     public static void main(String[] args) {

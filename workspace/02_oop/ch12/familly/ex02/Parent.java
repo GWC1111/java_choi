@@ -1,13 +1,13 @@
-package ch12.family.ex01;
+package ch12.familly.ex02;
 
-public class Daughter {
+public class Parent {
     String name;
 
-    public Daughter(){
-        this("자식");
+    public Parent (){
+        this("부모");
     }
 
-    public Daughter(String name) {
+    public Parent(String name) {
         this.name = name;
     }
 
@@ -16,7 +16,7 @@ public class Daughter {
     }
 
     void play() {
-        System.out.println(name + ": 코노에 간다.");
+        System.out.println(name + ": 등산한다.");
     }
 
     void sleep() {
