@@ -73,7 +73,8 @@ SELECT id, title, created_at
     LIMIT 2, 2;
 
 
-
+-- 로그인 체크
+SELECT * FROM member WHERE email = 'haru@gmail.com' AND password = 'pwd123';
 
 
 

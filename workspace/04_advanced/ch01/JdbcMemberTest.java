@@ -1,4 +1,4 @@
-package ch07;
+package ch01;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,20 +29,10 @@ public class JdbcMemberTest {
     public static void login(String email, String password) {
         String sql = "SELECT * FROM member WHERE email = '"+email+"' AND password = '"+password+"'";
         System.out.println("로그인 쿼리: " + sql);
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
 
-        try{ // 플랜 A
-            // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-
-            // 2. SQL 실행 객체 생성(Statement 객체 생성)
-            stmt = conn.createStatement();
-
-            // 3. SQL 실행(SELECT)
-            // 4. 결과 수신(ResultSet 객체 생성)
-            rs = stmt.executeQuery(sql);
+        try(Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){ // 플랜 A
 
             if(rs.next()){
                 int id = rs.getInt("id");
@@ -57,30 +47,14 @@ public class JdbcMemberTest {
         }catch(Exception e){ // 플랜 B
             System.out.println("에러 발생: " + e.getMessage());
             e.printStackTrace();
-        }finally{
-            // 5. 생성된 리소스를 생성의 역순으로 해제
-            try{ if(rs != null) rs.close(); } catch (Exception e){ }
-            try{ if(stmt != null) stmt.close(); } catch (Exception e){ }
-            try{ if(conn != null) conn.close(); } catch (Exception e){ }
         }
     }
 
     // 회원 목록 조회
     public static void selectAllMembers(){
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-
-        try{ // 플랜 A
-            // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-
-            // 2. SQL 실행 객체 생성(Statement 객체 생성)
-            stmt = conn.createStatement();
-
-            // 3. SQL 실행(SELECT)
-            // 4. 결과 수신(ResultSet 객체 생성)
-            rs = stmt.executeQuery("SELECT * FROM member");
+        try(Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM member")){ // 플랜 A
 
             while(rs.next()){
                 int id = rs.getInt("id");
@@ -94,28 +68,17 @@ public class JdbcMemberTest {
         }catch(Exception e){ // 플랜 B
             System.out.println("에러 발생: " + e.getMessage());
             e.printStackTrace();
-        }finally{
-            // 5. 생성된 리소스를 생성의 역순으로 해제
-            try{ if(rs != null) rs.close(); } catch (Exception e){ }
-            try{ if(stmt != null) stmt.close(); } catch (Exception e){ }
-            try{ if(conn != null) conn.close(); } catch (Exception e){ }
         }
     }
 
     // 회원 등록
     public static void insertMember(String email, String password, String name, String phone, int recommenderId){
-        Connection conn = null;
-        Statement stmt = null;
+        try(Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Statement stmt = conn.createStatement()){ // 플랜 A
 
-        try{ // 플랜 A
-            // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-
-            // 2. SQL 실행 객체 생성(Statement 객체 생성)
-            stmt = conn.createStatement();
-
-            // 3. SQL 실행(SELECT)
-            // 4. 결과 수신(ResultSet 객체 생성)
+            if(phone.length() > 12) {
+                throw new IllegalAccessException("phone은 12자 이내여야 합니다.");
+            }
             int affectedRows = stmt.executeUpdate("INSERT INTO member (email, password, name, phone, recommender_id) VALUES \n" +
                     "    ('"+email+"', '"+password+"', '"+name+"', '"+phone+"', "+recommenderId+")");
 
@@ -124,24 +87,15 @@ public class JdbcMemberTest {
         }catch(Exception e){ // 플랜 B
             System.out.println("에러 발생: " + e.getMessage());
             e.printStackTrace();
-        }finally{
-            // 5. 생성된 리소스를 생성의 역순으로 해제
-            try{ if(stmt != null) stmt.close(); } catch (Exception e){ }
-            try{ if(conn != null) conn.close(); } catch (Exception e){ }
         }
     }
 
     // 회원 수정
     public static void updateMember(int id, String password, String name, String phone){
-        Connection conn = null;
-        Statement stmt = null;
 
-        try{ // 플랜 A
-            // 1. 데이터베이스 연결(Connection 객체 생성)
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        try(Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Statement stmt = conn.createStatement()){ // 플랜 A
 
-            // 2. SQL 실행 객체 생성(Statement 객체 생성)
-            stmt = conn.createStatement();
 
             // 3. SQL 실행(SELECT)
             // 4. 결과 수신(ResultSet 객체 생성)
@@ -153,10 +107,6 @@ public class JdbcMemberTest {
         }catch(Exception e){ // 플랜 B
             System.out.println("에러 발생: " + e.getMessage());
             e.printStackTrace();
-        }finally{
-            // 5. 생성된 리소스를 생성의 역순으로 해제
-            try{ if(stmt != null) stmt.close(); } catch (Exception e){ }
-            try{ if(conn != null) conn.close(); } catch (Exception e){ }
         }
     }
 

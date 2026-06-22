@@ -1,9 +1,6 @@
 package ch07;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class JdbcPostTest {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/board_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
@@ -43,7 +40,7 @@ public class JdbcPostTest {
 
             System.out.println("게시글 등록 완료: " + affectedRows + "건 반영됨.");
 
-        }catch(Exception e){ // 플랜 B
+        }catch(SQLException e){ // 플랜 B
             System.out.println("에러 발생: " + e.getMessage());
             e.printStackTrace();
         }finally{
