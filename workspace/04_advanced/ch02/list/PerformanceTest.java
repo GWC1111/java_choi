@@ -19,15 +19,15 @@ public class PerformanceTest {
         System.out.println("MyArray addFirst 소요 시간: " + (end - start) + "ms");
     }
 
-    void addFirst(MyArray list, int times) {
+    void addFirst(MyList list, int times) {
         for(int i=0; i<times; i++) {
-            list.append(0, "데이터-" + i);
+            list.add(0, "데이터-" + i);
         }
     }
 
-    void addLast(MyArray list, int times) {
+    void addLast(MyList list, int times) {
         for(int i=0; i<times; i++) {
-            list.append("데이터-" + i);
+            list.add("데이터-" + i);
         }
     }
 }

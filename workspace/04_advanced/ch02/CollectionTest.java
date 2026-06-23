@@ -2,7 +2,7 @@ package ch02;
 
 import java.util.*;
 
-public class ArrayListTest {
+public class CollectionTest {
     void main(){
 //        String[] fruits = new String[5];
 //        fruits[0] = "바나나";
@@ -21,9 +21,9 @@ public class ArrayListTest {
         //파인애플
         //수박
         //사과
-//        ArrayList<String> fruits = new ArrayList<>();
-        LinkedList<String> fruits = new LinkedList<>();
-//        Vector<String> fruits = new Vector<>();
+//        List<String> fruits = new ArrayList<>();
+//        List<String> fruits = new LinkedList<>();
+//        List<String> fruits = new Vector<>();
 
         // Set
         // 데이터 중복 X
@@ -35,7 +35,7 @@ public class ArrayListTest {
         //파인애플
 
         // 저장한 순서 X
-//        HashSet<String> fruits = new HashSet<>();
+        Set<String> fruits = new HashSet<>();
 
         //바나나
         //사과
@@ -53,7 +53,7 @@ public class ArrayListTest {
         //수박
 
         // 저장한 순서 O
-//        LinkedHashSet<String> fruits = new LinkedHashSet<>();
+//        Set<String> fruits = new LinkedHashSet<>();
 
         fruits.add("바나나");
         fruits.add("사과");
@@ -72,11 +72,11 @@ public class ArrayListTest {
 //        }
 //    }
 
-//    void printFruits(Collection<String> fruits){
-//        for(String fruit : fruits){
-//            System.out.println(fruit);
-//        }
-//    }
+    void printFruits(Collection<String> fruits){
+        for(String fruit : fruits){
+            System.out.println(fruit);
+        }
+    }
 
 //    void printFruits(List<String> fruits){
 //        System.out.println(fruits.get(1));
@@ -91,19 +91,19 @@ public class ArrayListTest {
 //        }
 //    }
 
-    void printFruits(List<String> fruits){
-        System.out.println(fruits.getLast());
-        for(String fruit : fruits){
-            System.out.println(fruit);
-        }
-    }
+//    void printFruits(List<String> fruits){
+//        System.out.println(fruits.getLast());
+//        for(String fruit : fruits){
+//            System.out.println(fruit);
+//        }
+//    }
 
-    void printFruits(LinkedList<String> fruits){
-        System.out.println(fruits.getLast());
-        for(String fruit : fruits){
-            System.out.println(fruit);
-        }
-    }
+//    void printFruits(LinkedList<String> fruits){
+//        System.out.println(fruits.getLast());
+//        for(String fruit : fruits){
+//            System.out.println(fruit);
+//        }
+//    }
 //
 //    void printFruits(Vector<String> fruits){
 //        for(String fruit : fruits){
